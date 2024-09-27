@@ -1,0 +1,15 @@
+services:
+  static-images:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT}:${PORT}"
+    env_file: .env
+    environment:
+      NODE_ENV: "DEVELOPMENT"
+    volumes:
+      - "fileUpload:${APP_DIR}/${IMAGE_DIR}"
+    command: [ "node", "dist/app.js" ]
+volumes:
+  fileUpload:
