@@ -1,15 +1,34 @@
-# Elysia with Bun runtime
+# Image service
 
-## Getting Started
-To get started with this template, simply paste this command into your terminal:
-```bash
-bun create elysia ./elysia-example
+Upload images to your server! And serve them to your users!
+
+## Features
+
+- File upload
+- Static image serving
+- API key authentication
+
+## Installation
+
+### Fill out the .env file
+
+```dotenv
+KEY=
+IMAGE_DIR=
+APP_DIR=
+PORT=
+API_KEY=
 ```
 
-## Development
-To start the development server run:
+### Install dependencies
+
 ```bash
-bun run dev
+pnpm install
 ```
 
-Open http://localhost:3000/ with your browser to see the result.
+## Usage
+
+```bash
+pnpm dev
+```
+
