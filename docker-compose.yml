@@ -7,9 +7,9 @@ services:
       - "${PORT}:${PORT}"
     env_file: .env
     environment:
-      NODE_ENV: "DEVELOPMENT"
+      NODE_ENV: "production"
     volumes:
-      - "fileUpload:${APP_DIR}/${IMAGE_DIR}"
-    command: [ "node", "dist/app.js" ]
+      - "fileUpload:/home/image-service/upload/${IMAGE_DIR}"
+    command: [ "node", "dist/src/app.js" ]
 volumes:
   fileUpload:

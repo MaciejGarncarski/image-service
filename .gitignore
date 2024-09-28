@@ -22,7 +22,10 @@ yarn-debug.log*
 yarn-error.log*
 
 .idea
+
+# local env files
 .env
+.env.test
 
 **/*.trace
 **/*.zip

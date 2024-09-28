@@ -2,8 +2,8 @@ FROM node:20-slim AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
-COPY . ${APP_DIR}
-WORKDIR ${APP_DIR}
+COPY . /home/image-service
+WORKDIR /home/image-service
 
 FROM base AS prod-deps
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
@@ -13,7 +13,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm run build
 
 FROM base
-COPY --from=prod-deps ${APP_DIR}/node_modules ${APP_DIR}/node_modules
-COPY --from=build ${APP_DIR}/dist ${APP_DIR}/dist
+COPY --from=prod-deps /home/image-service/node_modules /home/image-service/node_modules
+COPY --from=build /home/image-service/dist /home/image-service/dist
 EXPOSE ${PORT}
 CMD [ "pnpm", "start" ]
