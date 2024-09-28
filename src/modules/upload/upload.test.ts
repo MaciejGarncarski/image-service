@@ -21,8 +21,6 @@ describe("POST /upload controller test", async () => {
 			},
 		});
 
-		console.log(response.json());
-
 		assert.strictEqual(response.statusCode, 400);
 		assert.strictEqual(response.json().error, "Bad Request");
 		assert.strictEqual(response.json().message, "File is required");

@@ -60,7 +60,7 @@ export async function uploadHandler(
 		await mkdir(safePathname, { recursive: true });
 		await copyFile(fileField.filepath, safeFilePath);
 	} catch (e) {
-		console.log(e);
+		request.log.error(e);
 	}
 
 	return reply.send({
