@@ -58,3 +58,5 @@ pnpm test
 ## License
 
 MIT
+
+Copyright (c) 2024 Maciej Garncarski
