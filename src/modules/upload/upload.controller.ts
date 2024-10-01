@@ -1,73 +1,46 @@
-import { copyFile, mkdir } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import { join, normalize } from "node:path";
 
 import { MultipartValue } from "@fastify/multipart";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { fileTypeFromFile } from "file-type";
+import { fileTypeFromBuffer } from "file-type";
 import { nanoid } from "nanoid";
 
-import { ACCEPTED_MIMETYPES, config } from "../../config/config.js";
-import { UploadBody } from "./upload.schema.js";
+import { ACCEPTED_MIMETYPES } from "../../config/config.js";
+import { parseFolderField } from "./utils/parse-folder-field.js";
 
-export async function uploadHandler(
-	request: FastifyRequest<{ Body: UploadBody }>,
-	reply: FastifyReply,
-) {
-	const files = await request.saveRequestFiles();
-	const fileField = files[0];
+export async function uploadHandler(request: FastifyRequest, reply: FastifyReply) {
+	const file = await request.file();
 
-	if (!fileField) {
+	if (!file) {
 		return reply.badRequest("File is required");
 	}
 
-	const dirnameField = fileField.fields.dirname as MultipartValue<string | undefined>;
+	const fileBuffer = await file.toBuffer();
+	const fileType = await fileTypeFromBuffer(fileBuffer);
 
-	if (!dirnameField) {
-		return reply.badRequest("Invalid dirname");
-	}
-
-	const dirname = dirnameField.value as string;
-
-	if (dirname.startsWith("..")) {
-		return reply.badRequest("Invalid dirname");
-	}
-
-	if (!fileField) {
-		return reply.badRequest("File is required");
-	}
-
-	if (!ACCEPTED_MIMETYPES.includes(fileField.mimetype)) {
+	if (!fileType || !ACCEPTED_MIMETYPES.includes(fileType.mime)) {
 		return reply.badRequest("Invalid file type");
 	}
+
+	const folderField = file.fields.folder as MultipartValue<string | undefined>;
+	const safePathname = parseFolderField(folderField);
+
+	if (!safePathname) {
+		return reply.badRequest("Invalid folder");
+	}
+
 	const fileId = nanoid();
-	const safeDirname = dirname.replace(/^(\.\.(\/|\\|$))+/, "");
-	const safePathname = normalize(
-		join(import.meta.dirname, "../../..", config.IMAGE_DIR, safeDirname),
-	);
+	const safeFilePath = normalize(join(safePathname, `${fileId}.${fileType.ext}`));
 
-	if (
-		!safePathname.startsWith(join(import.meta.dirname, "../../..", config.IMAGE_DIR)) ||
-		safePathname.startsWith("..") ||
-		safeDirname.startsWith("..")
-	) {
-		return reply.badRequest("Invalid dirname");
-	}
-
-	const fileType = await fileTypeFromFile(fileField.filepath);
-	const safeFilePath = normalize(join(safePathname, `${fileId}.${fileType?.ext || "jpg"}`));
-
-	try {
-		await mkdir(safePathname, { recursive: true });
-		await copyFile(fileField.filepath, safeFilePath);
-	} catch (e) {
-		request.log.error(e);
-	}
+	await mkdir(safePathname, { recursive: true });
+	await writeFile(safeFilePath, fileBuffer);
 
 	return reply.send({
 		status: "success",
 		message: "File uploaded successfully",
 		data: {
-			fileName: `${fileId}.${fileType?.ext || "jpg"}`,
+			fileName: `${fileId}.${fileType.ext}`,
 		},
 	});
 }

@@ -7,6 +7,8 @@
 
 # testing
 /coverage
+html
+image-upload
 
 # production
 /build
@@ -25,7 +27,6 @@ yarn-error.log*
 
 # local env files
 .env
-.env.test
 
 **/*.trace
 **/*.zip

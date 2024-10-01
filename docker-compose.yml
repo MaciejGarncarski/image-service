@@ -1,15 +1,34 @@
 services:
-  static-images:
+  image-service:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "${PORT}:${PORT}"
     env_file: .env
+    container_name: image-service
     environment:
       NODE_ENV: "production"
     volumes:
-      - "fileUpload:/home/image-service/upload/${IMAGE_DIR}"
+      - "fileUpload:/home/image-service/${IMAGE_DIR}"
+      - "cache:/var/cache/nginx/static"
     command: [ "node", "dist/src/app.js" ]
+    networks:
+      - app-network
+  nginx:
+    image: nginx:alpine
+    container_name: ${REVERSE_PROXY_HOST}
+    ports:
+      - "${REVERSE_PROXY_PORT}:${REVERSE_PROXY_PORT}"
+    env_file: .env
+    volumes:
+      - "fileUpload:/home/image-service/${IMAGE_DIR}"
+      - ./default.conf.template:/etc/nginx/templates/default.conf.template
+    networks:
+      - app-network
 volumes:
   fileUpload:
+  cache:
+networks:
+  app-network:
+    driver: bridge

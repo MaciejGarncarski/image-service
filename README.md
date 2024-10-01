@@ -40,16 +40,7 @@ pnpm dev
 
 ## Testing
 
-This app uses native node test runner.
-
-### Fill out the .env.test file
-
-```dotenv
-IMAGE_DIR=
-APP_DIR=
-PORT=
-API_KEY=
-```
+TODO
 
 ```bash
 pnpm test
