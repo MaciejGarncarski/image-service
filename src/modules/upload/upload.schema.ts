@@ -10,7 +10,7 @@ export const uploadResponseSchema = {
 	}),
 	400: z.object({
 		error: z.literal("Bad Request"),
-		message: z.enum(["File is required", "Invalid file type", "Invalid folder"]),
+		message: z.enum(["File is required", "Invalid file type", "Invalid folder", "Folder is full"]),
 	}),
 	500: z.object({
 		error: z.literal("Internal Server Error"),

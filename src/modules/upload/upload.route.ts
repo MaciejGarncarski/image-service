@@ -28,12 +28,11 @@ export const uploadRoutes: FastifyPluginAsync = async (server) => {
 		},
 		handler: async (request: FastifyRequest<{ Params: { folder: string } }>, reply) => {
 			const folder = request.params.folder;
-
 			try {
 				const dir = await readdir(`${config.IMAGE_DIR}/${folder || "default"}`);
 				return reply.send({ data: dir });
 			} catch {
-				return reply.notFound("not found");
+				return reply.notFound();
 			}
 		},
 	});

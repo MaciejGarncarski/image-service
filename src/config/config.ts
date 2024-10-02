@@ -7,6 +7,8 @@ export const HEADER_API_KEY = "x-api-key";
 // 5 Megabytes
 export const MAX_FILE_SIZE = 1024 * 1024 * 5;
 
+export const MAX_FOLDER_SIZE = 10;
+
 export const ACCEPTED_MIMETYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"];
 
 export const schema = z.object({
