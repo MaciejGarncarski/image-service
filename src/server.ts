@@ -1,3 +1,4 @@
+import { fastifyCors } from "@fastify/cors";
 import { fastifyMultipart } from "@fastify/multipart";
 import { fastifySensible } from "@fastify/sensible";
 import { fastifySwagger } from "@fastify/swagger";
@@ -35,6 +36,9 @@ export const createServer = async () => {
 	});
 
 	await app.register(fastifySensible);
+	await app.register(fastifyCors, {
+		origin: "*",
+	});
 
 	await app.register(fastifyMultipart, {
 		limits: {
