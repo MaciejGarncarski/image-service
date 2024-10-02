@@ -1,4 +1,4 @@
-import { readdir } from "node:fs/promises";
+import { readdir, unlink } from "node:fs/promises";
 
 import { FastifyPluginAsync, FastifyRequest } from "fastify";
 import z from "zod";
@@ -37,10 +37,22 @@ export const uploadRoutes: FastifyPluginAsync = async (server) => {
 		},
 	});
 
-	// server.route({
-	// 	method: "DELETE",
-	// 	url: "/delete/:folder/:file",
-	//
-	// 	}
-	// )
+	server.route({
+		method: "DELETE",
+		url: "/delete/:folder/:file",
+		handler: async (
+			request: FastifyRequest<{ Params: { folder: string; file: string } }>,
+			reply,
+		) => {
+			const folder = request.params.folder;
+			const file = request.params.file;
+
+			try {
+				await unlink(`${config.IMAGE_DIR}/${folder}/${file}`);
+				return reply.send({ status: "success" });
+			} catch {
+				return reply.notFound();
+			}
+		},
+	});
 };
