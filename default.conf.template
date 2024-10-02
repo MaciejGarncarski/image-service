@@ -3,6 +3,7 @@
 proxy_cache_path /var/cache/nginx/static levels=1:2 keys_zone=static_cache:10m max_size=1g inactive=60m use_temp_path=off;
 
 server {
+    client_max_body_size 10M;
     server_name ${REVERSE_PROXY_HOST};
     listen ${REVERSE_PROXY_PORT};
 
