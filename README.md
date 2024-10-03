@@ -2,7 +2,7 @@
 
 Upload images to your server! And serve them to your users!
 
-![Image service](https://raw.githubusercontent.com/MaciejGarncarski/image-service/refs/heads/main/.github/assets/logo.png "Image service")
+![Image service](https://raw.githubusercontent.com/MaciejGarncarski/image-service/refs/heads/main/.github/assets/logo.jpeg "Image service")
 
 ## Features
 
