@@ -2,12 +2,14 @@
 
 Upload images to your server! And serve them to your users!
 
+![Image service](https://raw.githubusercontent.com/MaciejGarncarski/image-service/refs/heads/main/.github/assets/logo.png "Image service")
+
 ## Features
 
 - File upload
 - Static image serving
 - API key authentication
-    - Use x-api-header, could be changed by modifying the config file (src/config/config.ts)
+  - Use x-api-header, could be changed by modifying the config file (src/config/config.ts)
 
 ## Documentation
 
