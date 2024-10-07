@@ -2,7 +2,9 @@
 
 Upload images to your server! And serve them to your users!
 
-![Image service](https://raw.githubusercontent.com/MaciejGarncarski/image-service/refs/heads/main/.github/assets/logo.jpeg "Image service")
+<div align="center">
+  <img alt="Image service logo" src="https://raw.githubusercontent.com/MaciejGarncarski/image-service/refs/heads/main/.github/assets/logo-crop.jpeg"/>
+</div>
 
 ## Features
 
@@ -68,6 +70,18 @@ use vitest.
 
 ```bash
 pnpm test
+```
+
+### Coverage
+
+```bash
+pnpm coverage
+```
+
+### Vitest UI
+
+```bash
+pnpm test-ui
 ```
 
 ## License
