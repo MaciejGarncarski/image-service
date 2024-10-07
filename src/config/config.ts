@@ -19,6 +19,7 @@ export const schema = Type.Object({
 	NODE_ENV: nodeEnvSchema,
 	IMAGE_DIR: Type.String(),
 	API_KEY: Type.String({ minLength: 24 }),
+	SERVER_HOST: Type.String(),
 });
 
 export const config = envSchema<Static<typeof schema>>({

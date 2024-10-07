@@ -11,7 +11,7 @@ services:
       NODE_ENV: "production"
     volumes:
       - "./${IMAGE_DIR}:/home/image-service/${IMAGE_DIR}"
-    command: [ "node", "dist/src/app.js" ]
+    command: ["node", "dist/src/app.js"]
     networks:
       - app-network
   nginx:
