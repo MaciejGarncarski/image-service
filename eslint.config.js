@@ -14,7 +14,7 @@ export default [
 		files: ["**/*.{js,mjs,cjs,ts}"],
 	},
 	{
-		languageOptions: { globals: globals.builtin },
+		languageOptions: { globals: globals.nodeBuiltin },
 		plugins: {
 			unicorn: eslintPluginUnicorn,
 			"unused-imports": eslintPluginUnusedImports,

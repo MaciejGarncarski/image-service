@@ -1,10 +1,11 @@
 import { access, rm } from "node:fs/promises";
 
+import { testConfig } from "@tests/test-config.js";
+import { readAssetImage } from "@tests/utils/read-asset-image.js";
 import { afterAll, expect } from "vitest";
 
-import { testConfig } from "../../../tests/test-config.js";
-import { readAssetImage } from "../../../tests/utils/read-asset-image.js";
-import { createServer } from "../../server.js";
+import { MAX_FOLDER_SIZE } from "@/config/config.js";
+import { createServer } from "@/server.js";
 
 const folderPath = "test-folder";
 
@@ -12,9 +13,10 @@ describe("POST /upload controller test", async () => {
 	const fastify = await createServer();
 
 	afterAll(() => fastify.close());
-	afterAll(() => rm(`${testConfig.IMAGE_DIR}/${folderPath}/`, { recursive: true }));
+	// Delete upload folder after all tests
+	afterAll(() => rm(`${testConfig.IMAGE_DIR}`, { recursive: true }));
 
-	it("should return error if uploads no file", async () => {
+	it("should error if uploads no file", async () => {
 		const formData = new FormData();
 		formData.append("folder", folderPath);
 
@@ -32,7 +34,7 @@ describe("POST /upload controller test", async () => {
 		expect(response.json().message).toBe("File is required");
 	});
 
-	it("should return error if uploads no directory", async () => {
+	it("should error if uploads no directory", async () => {
 		const formData = new FormData();
 
 		const assetFile = readAssetImage("cat.jpg");
@@ -52,7 +54,7 @@ describe("POST /upload controller test", async () => {
 		expect(response.json().message).toBe("Invalid folder");
 	});
 
-	it("should return error if uploads invalid file type", async () => {
+	it("should error if uploads invalid file type", async () => {
 		const formData = new FormData();
 		const assetFile = readAssetImage("sunflowers.avif");
 		formData.append("file", assetFile);
@@ -72,27 +74,7 @@ describe("POST /upload controller test", async () => {
 		expect(response.json().message).toBe("Invalid file type");
 	});
 
-	it("should return error if uploads invalid directory", async () => {
-		const formData = new FormData();
-		const assetFile = readAssetImage("doggy.png");
-		formData.append("file", assetFile);
-		formData.append("folder", "../../");
-
-		const response = await fastify.inject({
-			method: "POST",
-			url: "/upload",
-			payload: formData,
-			headers: {
-				"x-api-key": testConfig.API_KEY,
-			},
-		});
-
-		expect(response.statusCode).toBe(400);
-		expect(response.json().error).toBe("Bad Request");
-		expect(response.json().message).toBe("Invalid folder");
-	});
-
-	it("should upload image to folder", async () => {
+	it("should upload image to correct folder", async () => {
 		const formData = new FormData();
 		const assetFile = readAssetImage("doggy.png");
 		formData.append("file", assetFile);
@@ -109,11 +91,103 @@ describe("POST /upload controller test", async () => {
 
 		const responseData = response.json();
 		expect(response.statusCode).toBe(200);
-		expect(responseData.status).toBe("success");
 		expect(responseData.message).toBe("File uploaded successfully");
 
 		expect(
 			access(`${testConfig.IMAGE_DIR}/${folderPath}/${responseData.data.fileName}`),
 		).resolves.toBe(undefined);
+	});
+
+	it("should error if uploads more than MAX_FOLDER_SIZE", async () => {
+		const formData = new FormData();
+		const assetFile = readAssetImage("doggy.png");
+		formData.append("file", assetFile);
+		formData.append("folder", folderPath + "/limit");
+
+		for (let i = 0; i <= MAX_FOLDER_SIZE + 1; i++) {
+			await fastify.inject({
+				method: "POST",
+				url: "/upload",
+				payload: formData,
+				headers: {
+					"x-api-key": testConfig.API_KEY,
+				},
+			});
+		}
+
+		const response = await fastify.inject({
+			method: "POST",
+			url: "/upload",
+			payload: formData,
+			headers: {
+				"x-api-key": testConfig.API_KEY,
+			},
+		});
+
+		expect(response.statusCode).toBe(400);
+		expect(response.json().error).toBe("Bad Request");
+		expect(response.json().message).toBe("Folder is full");
+	});
+
+	describe("Path traversal", () => {
+		it("should error if folder starts with '/'", async () => {
+			const formData = new FormData();
+			const assetFile = readAssetImage("doggy.png");
+			formData.append("file", assetFile);
+			formData.append("folder", "/home");
+
+			const response = await fastify.inject({
+				method: "POST",
+				url: "/upload",
+				payload: formData,
+				headers: {
+					"x-api-key": testConfig.API_KEY,
+				},
+			});
+
+			expect(response.statusCode).toBe(400);
+			expect(response.json().error).toBe("Bad Request");
+			expect(response.json().message).toBe("Invalid folder");
+		});
+
+		it("should error if folder starts with '../' ", async () => {
+			const formData = new FormData();
+			const assetFile = readAssetImage("doggy.png");
+			formData.append("file", assetFile);
+			formData.append("folder", "../../");
+
+			const response = await fastify.inject({
+				method: "POST",
+				url: "/upload",
+				payload: formData,
+				headers: {
+					"x-api-key": testConfig.API_KEY,
+				},
+			});
+
+			expect(response.statusCode).toBe(400);
+			expect(response.json().error).toBe("Bad Request");
+			expect(response.json().message).toBe("Invalid folder");
+		});
+
+		it("should error if folder contains '..'", async () => {
+			const formData = new FormData();
+			const assetFile = readAssetImage("doggy.png");
+			formData.append("file", assetFile);
+			formData.append("folder", `${folderPath}../test`);
+
+			const response = await fastify.inject({
+				method: "POST",
+				url: "/upload",
+				payload: formData,
+				headers: {
+					"x-api-key": testConfig.API_KEY,
+				},
+			});
+
+			expect(response.statusCode).toBe(400);
+			expect(response.json().error).toBe("Bad Request");
+			expect(response.json().message).toBe("Invalid folder");
+		});
 	});
 });

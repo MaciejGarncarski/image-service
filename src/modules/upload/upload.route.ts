@@ -1,11 +1,11 @@
 import { readdir, unlink } from "node:fs/promises";
 
+import { Type } from "@sinclair/typebox";
 import { FastifyPluginAsync, FastifyRequest } from "fastify";
-import z from "zod";
 
-import { config } from "../../config/config.js";
-import { uploadHandler } from "./upload.controller.js";
-import { uploadResponseSchema } from "./upload.schema.js";
+import { config } from "@/config/config.js";
+import { uploadHandler } from "@/modules/upload/upload.controller.js";
+import { uploadResponseSchema } from "@/modules/upload/upload.schema.js";
 
 export const uploadRoutes: FastifyPluginAsync = async (server) => {
 	server.route({
@@ -22,9 +22,14 @@ export const uploadRoutes: FastifyPluginAsync = async (server) => {
 		method: "GET",
 		url: "/list/:folder",
 		schema: {
-			params: z.object({
-				folder: z.string(),
+			params: Type.Object({
+				folder: Type.String(),
 			}),
+			response: {
+				404: {
+					$ref: "HttpError",
+				},
+			},
 		},
 		handler: async (request: FastifyRequest<{ Params: { folder: string } }>, reply) => {
 			const folder = request.params.folder;
@@ -49,7 +54,7 @@ export const uploadRoutes: FastifyPluginAsync = async (server) => {
 
 			try {
 				await unlink(`${config.IMAGE_DIR}/${folder}/${file}`);
-				return reply.send({ status: "success" });
+				return reply.send({ message: "File deleted" });
 			} catch {
 				return reply.notFound();
 			}

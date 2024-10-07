@@ -26,6 +26,12 @@ importers:
       '@fastify/swagger-ui':
         specifier: ^5.0.1
         version: 5.0.1
+      '@fastify/type-provider-typebox':
+        specifier: ^5.0.0
+        version: 5.0.0(@sinclair/typebox@0.33.13)
+      '@sinclair/typebox':
+        specifier: ^0.33.13
+        version: 0.33.13
       chokidar:
         specifier: ^4.0.1
         version: 4.0.1
@@ -35,21 +41,12 @@ importers:
       fastify:
         specifier: ^5.0.0
         version: 5.0.0
-      fastify-type-provider-zod:
-        specifier: ^3.0.0
-        version: 3.0.0(fastify@5.0.0)(zod@3.23.8)
       file-type:
         specifier: ^19.5.0
         version: 19.5.0
       nanoid:
         specifier: ^5.0.7
         version: 5.0.7
-      zod:
-        specifier: ^3.23.8
-        version: 3.23.8
-      zod-to-json-schema:
-        specifier: ^3.23.3
-        version: 3.23.3(zod@3.23.8)
     devDependencies:
       '@eslint/js':
         specifier: ^9.11.1
@@ -96,6 +93,9 @@ importers:
       typescript-eslint:
         specifier: ^8.7.0
         version: 8.7.0(eslint@9.11.1)(typescript@5.6.2)
+      vite-tsconfig-paths:
+        specifier: ^5.0.1
+        version: 5.0.1(typescript@5.6.2)(vite@5.4.8(@types/node@22.7.3))
       vitest:
         specifier: ^2.1.1
         version: 2.1.1(@types/node@22.7.3)(@vitest/ui@2.1.1)
@@ -495,6 +495,11 @@ packages:
   '@fastify/swagger@9.1.0':
     resolution: {integrity: sha512-4q3OgaqoNngsbXcld8MAZX2N7Mf4hGp0OFZ6m8q+PZ1IcEeixjnfsdLDjJaRgJnYlGrSDkKgrWNGFG1+s4CiOA==}
 
+  '@fastify/type-provider-typebox@5.0.0':
+    resolution: {integrity: sha512-E6D31dfF0l7wLwUji0DIoHlaHzyUCTJV4K0FP+bdibuEj+YVh8QGhwH9MqYi+FoTZRTu+bXaDs+W9kdMImt+Bw==}
+    peerDependencies:
+      '@sinclair/typebox': '>=0.26 <=0.33'
+
   '@humanwhocodes/module-importer@1.0.1':
     resolution: {integrity: sha512-bxveV4V8v5Yb4ncFTT3rPSgZBOpCkjfK0y4oVVVJwIuDVBRMDXrPyXRL988i5ap9m9bnyEEjWfm5WkBmtffLfA==}
     engines: {node: '>=12.22'}
@@ -637,6 +642,9 @@ packages:
 
   '@sec-ant/readable-stream@0.4.1':
     resolution: {integrity: sha512-831qok9r2t8AlxLko40y2ebgSDhenenCatLVeW/uBtnHPyhHOvG0C7TvfgecV+wHzIm5KUICgzmVpWS+IMEAeg==}
+
+  '@sinclair/typebox@0.33.13':
+    resolution: {integrity: sha512-J568EQw9JohJ/pjRV9No6OLQa2px93CnqYoLNLJs60bCHaN2dNXiHVqBIX4YeMYSHmgswFZMMYcfxUg89bu/Bw==}
 
   '@tokenizer/token@0.3.0':
     resolution: {integrity: sha512-OvjF+z51L3ov0OyAU0duzsYuvO01PH7x4t6DJx+guahgTnBHkhJdG7soQeTSFLWN3efnHyibZ4Z8l2EuWwJN3A==}
@@ -1243,12 +1251,6 @@ packages:
   fastify-plugin@5.0.1:
     resolution: {integrity: sha512-HCxs+YnRaWzCl+cWRYFnHmeRFyR5GVnJTAaCJQiYzQSDwK9MgJdyAsuL3nh0EWRCYMgQ5MeziymvmAhUHYHDUQ==}
 
-  fastify-type-provider-zod@3.0.0:
-    resolution: {integrity: sha512-7zU+leWpPC5r8vQotPbkfUZhU144ScsQRkkQjgTGjwKGhNMEj6/bPO/yerSFJU9YCGQfSwao33RPFm1HXJUR5g==}
-    peerDependencies:
-      fastify: ^5.0.0
-      zod: ^3.14.2
-
   fastify@5.0.0:
     resolution: {integrity: sha512-Qe4dU+zGOzg7vXjw4EvcuyIbNnMwTmcuOhlOrOJsgwzvjEZmsM/IeHulgJk+r46STjdJS/ZJbxO8N70ODXDMEQ==}
 
@@ -1369,6 +1371,9 @@ packages:
   globalthis@1.0.4:
     resolution: {integrity: sha512-DpLKbNU4WylpxJykQujfCcwYWiV/Jhm50Goo0wrVILAv5jOr9d+H+UR3PhSCD2rCCEIg0uc+G+muBTwD54JhDQ==}
     engines: {node: '>= 0.4'}
+
+  globrex@0.1.2:
+    resolution: {integrity: sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==}
 
   gopd@1.0.1:
     resolution: {integrity: sha512-d65bNlIadxvpb/A2abVdlqKqV563juRnZ1Wtk6s1sIR8uNsXR70xqIzVqxVf1eTqDunwT2MkczEeaezCKTZhwA==}
@@ -2198,6 +2203,16 @@ packages:
     peerDependencies:
       typescript: '>=4.2.0'
 
+  tsconfck@3.1.3:
+    resolution: {integrity: sha512-ulNZP1SVpRDesxeMLON/LtWM8HIgAJEIVpVVhBM6gsmvQ8+Rh+ZG7FWGvHh7Ah3pRABwVJWklWCr/BTZSv0xnQ==}
+    engines: {node: ^18 || >=20}
+    hasBin: true
+    peerDependencies:
+      typescript: ^5.0.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
   tsconfig-paths@3.15.0:
     resolution: {integrity: sha512-2Ac2RgzDe/cn48GvOe3M+o82pEFewD3UPbyoUHHdKasHwJKjds4fLXWf/Ux5kATBKN20oaFGu+jbElp1pos0mg==}
 
@@ -2282,6 +2297,14 @@ packages:
     resolution: {integrity: sha512-N/mGckI1suG/5wQI35XeR9rsMsPqKXzq1CdUndzVstBj/HvyxxGctwnK6WX43NGt5L3Z5tcRf83g4TITKJhPrA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
+
+  vite-tsconfig-paths@5.0.1:
+    resolution: {integrity: sha512-yqwv+LstU7NwPeNqajZzLEBVpUFU6Dugtb2P84FXuvaoYA+/70l9MHE+GYfYAycVyPSDYZ7mjOFuYBRqlEpTig==}
+    peerDependencies:
+      vite: '*'
+    peerDependenciesMeta:
+      vite:
+        optional: true
 
   vite@5.4.8:
     resolution: {integrity: sha512-FqrItQ4DT1NC4zCUqMB4c4AZORMKIa0m8/URVCZ77OZ/QSNeJ54bU1vrFADbDsuwfIPcgknRkmqakQcgnL4GiQ==}
@@ -2379,14 +2402,6 @@ packages:
   yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
-
-  zod-to-json-schema@3.23.3:
-    resolution: {integrity: sha512-TYWChTxKQbRJp5ST22o/Irt9KC5nj7CdBKYB/AosCRdj/wxEMvv4NNaj9XVUHDOIp53ZxArGhnw5HMZziPFjog==}
-    peerDependencies:
-      zod: ^3.23.3
-
-  zod@3.23.8:
-    resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
 
 snapshots:
 
@@ -2688,6 +2703,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@fastify/type-provider-typebox@5.0.0(@sinclair/typebox@0.33.13)':
+    dependencies:
+      '@sinclair/typebox': 0.33.13
+
   '@humanwhocodes/module-importer@1.0.1': {}
 
   '@humanwhocodes/retry@0.3.0': {}
@@ -2790,6 +2809,8 @@ snapshots:
   '@rtsao/scc@1.1.0': {}
 
   '@sec-ant/readable-stream@0.4.1': {}
+
+  '@sinclair/typebox@0.33.13': {}
 
   '@tokenizer/token@0.3.0': {}
 
@@ -3579,12 +3600,6 @@ snapshots:
 
   fastify-plugin@5.0.1: {}
 
-  fastify-type-provider-zod@3.0.0(fastify@5.0.0)(zod@3.23.8):
-    dependencies:
-      fastify: 5.0.0
-      zod: 3.23.8
-      zod-to-json-schema: 3.23.3(zod@3.23.8)
-
   fastify@5.0.0:
     dependencies:
       '@fastify/ajv-compiler': 4.0.1
@@ -3735,6 +3750,8 @@ snapshots:
     dependencies:
       define-properties: 1.2.1
       gopd: 1.0.1
+
+  globrex@0.1.2: {}
 
   gopd@1.0.1:
     dependencies:
@@ -4538,6 +4555,10 @@ snapshots:
     dependencies:
       typescript: 5.6.2
 
+  tsconfck@3.1.3(typescript@5.6.2):
+    optionalDependencies:
+      typescript: 5.6.2
+
   tsconfig-paths@3.15.0:
     dependencies:
       '@types/json5': 0.0.29
@@ -4655,6 +4676,17 @@ snapshots:
       - supports-color
       - terser
 
+  vite-tsconfig-paths@5.0.1(typescript@5.6.2)(vite@5.4.8(@types/node@22.7.3)):
+    dependencies:
+      debug: 4.3.7
+      globrex: 0.1.2
+      tsconfck: 3.1.3(typescript@5.6.2)
+    optionalDependencies:
+      vite: 5.4.8(@types/node@22.7.3)
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
+
   vite@5.4.8(@types/node@22.7.3):
     dependencies:
       esbuild: 0.21.5
@@ -4743,9 +4775,3 @@ snapshots:
   yaml@2.5.1: {}
 
   yocto-queue@0.1.0: {}
-
-  zod-to-json-schema@3.23.3(zod@3.23.8):
-    dependencies:
-      zod: 3.23.8
-
-  zod@3.23.8: {}

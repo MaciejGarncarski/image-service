@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest, preHandlerAsyncHookHandler } from "fastify";
 
-import { config, HEADER_API_KEY } from "../config/config.js";
+import { config, HEADER_API_KEY } from "@/config/config.js";
 
 declare module "fastify" {
 	interface FastifyInstance {

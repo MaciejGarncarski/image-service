@@ -2,7 +2,7 @@ import { join, normalize } from "node:path";
 
 import { MultipartValue } from "@fastify/multipart";
 
-import { config } from "../../../config/config.js";
+import { config } from "@/config/config.js";
 
 export const parseFolderField = (folderField: MultipartValue<string | undefined>) => {
 	if (!folderField) {
@@ -11,7 +11,7 @@ export const parseFolderField = (folderField: MultipartValue<string | undefined>
 
 	const folderValue = folderField.value as string;
 
-	if (folderValue.startsWith("..")) {
+	if (folderValue.startsWith("..") || folderValue.startsWith("/") || folderValue.includes("..")) {
 		return undefined;
 	}
 

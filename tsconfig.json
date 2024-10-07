@@ -16,7 +16,16 @@
     "allowSyntheticDefaultImports": true,
     "types": [
       "vitest/globals"
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "@tests/*": [
+        "tests/*"
+      ]
+    }
   },
   "exclude": [
     "node_modules",

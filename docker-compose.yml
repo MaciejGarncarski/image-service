@@ -10,8 +10,7 @@ services:
     environment:
       NODE_ENV: "production"
     volumes:
-      - "fileUpload:/home/image-service/${IMAGE_DIR}"
-      - "cache:/var/cache/nginx/static"
+      - "./${IMAGE_DIR}:/home/image-service/${IMAGE_DIR}"
     command: [ "node", "dist/src/app.js" ]
     networks:
       - app-network
@@ -22,12 +21,12 @@ services:
       - "${REVERSE_PROXY_PORT}:${REVERSE_PROXY_PORT}"
     env_file: .env
     volumes:
-      - "fileUpload:/home/image-service/${IMAGE_DIR}"
+      - "./${IMAGE_DIR}:/home/image-service/${IMAGE_DIR}"
       - ./default.conf.template:/etc/nginx/templates/default.conf.template
+      - "cache:/var/cache/nginx/static"
     networks:
       - app-network
 volumes:
-  fileUpload:
   cache:
 networks:
   app-network:

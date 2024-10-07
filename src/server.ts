@@ -3,17 +3,12 @@ import { fastifyMultipart } from "@fastify/multipart";
 import { fastifySensible } from "@fastify/sensible";
 import { fastifySwagger } from "@fastify/swagger";
 import { fastifySwaggerUi } from "@fastify/swagger-ui";
+import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import Fastify from "fastify";
-import {
-	jsonSchemaTransform,
-	serializerCompiler,
-	validatorCompiler,
-	ZodTypeProvider,
-} from "fastify-type-provider-zod";
 
-import { environment, MAX_FILE_SIZE } from "./config/config.js";
-import { checkApiKey } from "./middleware/check-api-key.js";
-import { uploadRoutes } from "./modules/upload/upload.route.js";
+import { environment, MAX_FILE_SIZE } from "@/config/config.js";
+import { checkApiKey } from "@/middleware/check-api-key.js";
+import { uploadRoutes } from "@/modules/upload/upload.route.js";
 
 export const createServer = async () => {
 	const envToLogger = {
@@ -33,9 +28,11 @@ export const createServer = async () => {
 	const app = Fastify({
 		trustProxy: true,
 		logger: envToLogger[environment] ?? true,
-	});
+	}).withTypeProvider<TypeBoxTypeProvider>();
 
-	await app.register(fastifySensible);
+	await app.register(fastifySensible, {
+		sharedSchemaId: "HttpError",
+	});
 	await app.register(fastifyCors, {
 		origin: "*",
 	});
@@ -46,7 +43,6 @@ export const createServer = async () => {
 		},
 	});
 	await app.register(fastifySwagger, {
-		transform: jsonSchemaTransform,
 		openapi: {
 			info: {
 				title: "Image Service",
@@ -57,18 +53,15 @@ export const createServer = async () => {
 	});
 
 	await app.register(fastifySwaggerUi, {
-		routePrefix: "/documentation",
+		routePrefix: "/docs",
 		uiConfig: {
 			docExpansion: "full",
 			deepLinking: false,
 		},
 	});
 
-	app.setValidatorCompiler(validatorCompiler);
-	app.setSerializerCompiler(serializerCompiler);
-
 	app.decorate("checkApiKey", checkApiKey);
 	await app.register(uploadRoutes);
 
-	return app.withTypeProvider<ZodTypeProvider>();
+	return app;
 };

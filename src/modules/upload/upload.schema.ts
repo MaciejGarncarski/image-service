@@ -1,19 +1,25 @@
-import { z } from "zod";
+import { Type } from "@sinclair/typebox";
+
+import { StringLiteralUnion } from "@/utils/string-literal-union.js";
 
 export const uploadResponseSchema = {
-	200: z.object({
-		status: z.literal("success"),
-		message: z.literal("File uploaded successfully"),
-		data: z.object({
-			fileName: z.string(),
+	200: Type.Object({
+		message: Type.Literal("File uploaded successfully"),
+		data: Type.Object({
+			fileName: Type.String(),
 		}),
 	}),
-	400: z.object({
-		error: z.literal("Bad Request"),
-		message: z.enum(["File is required", "Invalid file type", "Invalid folder", "Folder is full"]),
+	400: Type.Object({
+		error: Type.Literal("Bad Request"),
+		message: StringLiteralUnion([
+			"File is required",
+			"Invalid file type",
+			"Invalid folder",
+			"Folder is full",
+		]),
 	}),
-	500: z.object({
-		error: z.literal("Internal Server Error"),
-		message: z.string(),
+	500: Type.Object({
+		error: Type.Literal("Internal Server Error"),
+		message: Type.String(),
 	}),
 };

@@ -1,6 +1,5 @@
+import { Static, Type } from "@sinclair/typebox";
 import { envSchema } from "env-schema";
-import { z } from "zod";
-import { zodToJsonSchema } from "zod-to-json-schema";
 
 export const HEADER_API_KEY = "x-api-key";
 
@@ -11,15 +10,20 @@ export const MAX_FOLDER_SIZE = 10;
 
 export const ACCEPTED_MIMETYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"];
 
-export const schema = z.object({
-	PORT: z.string(),
-	NODE_ENV: z.enum(["development", "production", "test"] as const).default("development"),
-	IMAGE_DIR: z.string(),
-	API_KEY: z.string().min(24),
+const nodeEnvSchema = Type.Union(
+	[Type.Literal("development"), Type.Literal("production"), Type.Literal("test")],
+	{ default: "development" },
+);
+
+export const schema = Type.Object({
+	PORT: Type.String(),
+	NODE_ENV: nodeEnvSchema,
+	IMAGE_DIR: Type.String(),
+	API_KEY: Type.String({ minLength: 24 }),
 });
 
-export const config = envSchema<z.infer<typeof schema>>({
-	schema: zodToJsonSchema(schema),
+export const config = envSchema<Static<typeof schema>>({
+	schema: schema,
 });
 
 export const environment = config.NODE_ENV;
