@@ -1,6 +1,8 @@
 import { Static, Type } from "@sinclair/typebox";
 import { envSchema } from "env-schema";
 
+import { StringLiteralUnion } from "../utils/string-literal-union.js";
+
 export const HEADER_API_KEY = "x-api-key";
 
 // 5 Megabytes
@@ -10,10 +12,7 @@ export const MAX_FOLDER_SIZE = 10;
 
 export const ACCEPTED_MIMETYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"];
 
-const nodeEnvSchema = Type.Union(
-	[Type.Literal("development"), Type.Literal("production"), Type.Literal("test")],
-	{ default: "development" },
-);
+const nodeEnvSchema = StringLiteralUnion(["development", "production", "test"]);
 
 export const schema = Type.Object({
 	PORT: Type.String(),

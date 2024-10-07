@@ -9,7 +9,7 @@ Upload images to your server! And serve them to your users!
 - File upload
 - Static image serving
 - API key authentication
-  - Use x-api-header, could be changed by modifying the config file (src/config/config.ts)
+    - Use x-api-header, could be changed by modifying the config file (src/config/config.ts)
 
 ## Documentation
 
@@ -20,11 +20,12 @@ https://image.maciej-garncarski.pl/docs
 ### Fill out the .env file
 
 ```dotenv
-IMAGE_DIR= # folder where images will be stored
-PORT= # fastify app port
 API_KEY= # api key for authentication
+PORT= # fastify app port
+SERVER_HOST= # name of docker-compose service eg. "image-service" or "localhost" in development
 REVERSE_PROXY_PORT= # reverse proxy port, most likely 80 or 443
 REVERSE_PROXY_HOST= # your domain or "image-service-proxy" in development
+IMAGE_DIR= # folder where images will be stored, folder should be located in this directory
 ```
 
 ### Install dependencies
