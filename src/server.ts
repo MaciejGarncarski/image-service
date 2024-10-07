@@ -6,9 +6,9 @@ import { fastifySwaggerUi } from "@fastify/swagger-ui";
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import Fastify from "fastify";
 
-import { environment, MAX_FILE_SIZE } from "@/config/config.js";
-import { checkApiKey } from "@/middleware/check-api-key.js";
-import { uploadRoutes } from "@/modules/upload/upload.route.js";
+import { environment, MAX_FILE_SIZE } from "./config/config.js";
+import { checkApiKey } from "./middleware/check-api-key.js";
+import { uploadRoutes } from "./modules/upload/upload.route.js";
 
 export const createServer = async () => {
 	const envToLogger = {

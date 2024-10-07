@@ -8,10 +8,6 @@ export default defineConfig({
 			include: ["src/**/*.controller.ts", "src/**/*.service.ts"],
 			provider: "v8",
 		},
-		alias: {
-			"@/*": new URL("./src/", import.meta.url).pathname,
-			"@tests/*": new URL("./tests/", import.meta.url).pathname,
-		},
 		globals: true,
 	},
 	plugins: [tsconfigPaths()],

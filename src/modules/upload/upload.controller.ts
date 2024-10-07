@@ -6,8 +6,8 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { fileTypeFromBuffer } from "file-type";
 import { nanoid } from "nanoid";
 
-import { ACCEPTED_MIMETYPES, MAX_FOLDER_SIZE } from "@/config/config.js";
-import { parseFolderField } from "@/modules/upload/utils/parse-folder-field.js";
+import { ACCEPTED_MIMETYPES, MAX_FOLDER_SIZE } from "../../config/config.js";
+import { parseFolderField } from "./utils/parse-folder-field.js";
 
 export async function uploadHandler(request: FastifyRequest, reply: FastifyReply) {
 	const file = await request.file();

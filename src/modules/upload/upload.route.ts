@@ -3,9 +3,9 @@ import { readdir, unlink } from "node:fs/promises";
 import { Type } from "@sinclair/typebox";
 import { FastifyPluginAsync, FastifyRequest } from "fastify";
 
-import { config } from "@/config/config.js";
-import { uploadHandler } from "@/modules/upload/upload.controller.js";
-import { uploadResponseSchema } from "@/modules/upload/upload.schema.js";
+import { config } from "../../config/config.js";
+import { uploadHandler } from "./upload.controller.js";
+import { uploadResponseSchema } from "./upload.schema.js";
 
 export const uploadRoutes: FastifyPluginAsync = async (server) => {
 	server.route({

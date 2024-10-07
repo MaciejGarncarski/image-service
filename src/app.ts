@@ -1,5 +1,5 @@
-import { config } from "@/config/config.js";
-import { createServer } from "@/server.js";
+import { config } from "./config/config.js";
+import { createServer } from "./server.js";
 
 const server = await createServer();
 

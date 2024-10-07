@@ -1,11 +1,11 @@
 import { access, rm } from "node:fs/promises";
 
-import { testConfig } from "@tests/test-config.js";
-import { readAssetImage } from "@tests/utils/read-asset-image.js";
 import { afterAll, expect } from "vitest";
 
-import { MAX_FOLDER_SIZE } from "@/config/config.js";
-import { createServer } from "@/server.js";
+import { testConfig } from "../../../tests/test-config.js";
+import { readAssetImage } from "../../../tests/utils/read-asset-image.js";
+import { MAX_FOLDER_SIZE } from "../../config/config.js";
+import { createServer } from "../../server.js";
 
 const folderPath = "test-folder";
 

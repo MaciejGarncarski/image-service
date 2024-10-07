@@ -17,15 +17,7 @@
     "types": [
       "vitest/globals"
     ],
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "src/*"
-      ],
-      "@tests/*": [
-        "tests/*"
-      ]
-    }
+    "baseUrl": "."
   },
   "exclude": [
     "node_modules",

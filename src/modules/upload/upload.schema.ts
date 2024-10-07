@@ -1,6 +1,6 @@
 import { Type } from "@sinclair/typebox";
 
-import { StringLiteralUnion } from "@/utils/string-literal-union.js";
+import { StringLiteralUnion } from "../../utils/string-literal-union.js";
 
 export const uploadResponseSchema = {
 	200: Type.Object({
