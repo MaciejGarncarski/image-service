@@ -56,7 +56,7 @@ describe("POST /upload controller test", async () => {
 
 	it("should error if uploads invalid file type", async () => {
 		const formData = new FormData();
-		const assetFile = readAssetImage("sunflowers.avif");
+		const assetFile = readAssetImage("unsupported.jxl");
 		formData.append("file", assetFile);
 		formData.append("folder", folderPath);
 
@@ -76,7 +76,7 @@ describe("POST /upload controller test", async () => {
 
 	it("should upload image to correct folder", async () => {
 		const formData = new FormData();
-		const assetFile = readAssetImage("doggy.png");
+		const assetFile = readAssetImage("sample.avif");
 		formData.append("file", assetFile);
 		formData.append("folder", folderPath);
 

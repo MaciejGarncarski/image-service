@@ -1,10 +1,10 @@
-import { readdir, unlink } from "node:fs/promises";
+import { readdir } from "node:fs/promises";
 
 import { Type } from "@sinclair/typebox";
 import { FastifyPluginAsync, FastifyRequest } from "fastify";
 
 import { config } from "../../config/config.js";
-import { uploadHandler } from "./upload.controller.js";
+import { deleteFileHandler, uploadHandler } from "./upload.controller.js";
 import { uploadResponseSchema } from "./upload.schema.js";
 
 export const uploadRoutes: FastifyPluginAsync = async (server) => {
@@ -13,6 +13,11 @@ export const uploadRoutes: FastifyPluginAsync = async (server) => {
 		url: "/upload",
 		preHandler: [server.checkApiKey],
 		schema: {
+			security: [
+				{
+					apiKey: [],
+				},
+			],
 			response: uploadResponseSchema,
 		},
 		handler: uploadHandler,
@@ -22,6 +27,11 @@ export const uploadRoutes: FastifyPluginAsync = async (server) => {
 		method: "GET",
 		url: "/list/:folder",
 		schema: {
+			security: [
+				{
+					apiKey: [],
+				},
+			],
 			params: Type.Object({
 				folder: Type.String(),
 			}),
@@ -45,19 +55,13 @@ export const uploadRoutes: FastifyPluginAsync = async (server) => {
 	server.route({
 		method: "DELETE",
 		url: "/delete/:folder/:file",
-		handler: async (
-			request: FastifyRequest<{ Params: { folder: string; file: string } }>,
-			reply,
-		) => {
-			const folder = request.params.folder;
-			const file = request.params.file;
-
-			try {
-				await unlink(`${config.IMAGE_DIR}/${folder}/${file}`);
-				return reply.send({ message: "File deleted" });
-			} catch {
-				return reply.notFound();
-			}
+		schema: {
+			security: [
+				{
+					apiKey: [],
+				},
+			],
 		},
+		handler: deleteFileHandler,
 	});
 };

@@ -1,4 +1,4 @@
-import { mkdir, readdir, writeFile } from "node:fs/promises";
+import { mkdir, readdir, unlink, writeFile } from "node:fs/promises";
 import { join, normalize } from "node:path";
 
 import { MultipartValue } from "@fastify/multipart";
@@ -6,7 +6,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { fileTypeFromBuffer } from "file-type";
 import { nanoid } from "nanoid";
 
-import { ACCEPTED_MIMETYPES, MAX_FOLDER_SIZE } from "../../config/config.js";
+import { ACCEPTED_MIMETYPES, config, MAX_FOLDER_SIZE } from "../../config/config.js";
 import { parseFolderField } from "./utils/parse-folder-field.js";
 
 export async function uploadHandler(request: FastifyRequest, reply: FastifyReply) {
@@ -51,3 +51,18 @@ export async function uploadHandler(request: FastifyRequest, reply: FastifyReply
 		},
 	});
 }
+
+export const deleteFileHandler = async (
+	request: FastifyRequest<{ Params: { folder: string; file: string } }>,
+	reply: FastifyReply,
+) => {
+	const folder = request.params.folder;
+	const file = request.params.file;
+
+	try {
+		await unlink(`${config.IMAGE_DIR}/${folder}/${file}`);
+		return reply.send({ message: "File deleted" });
+	} catch {
+		return reply.notFound();
+	}
+};

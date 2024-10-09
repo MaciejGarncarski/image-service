@@ -33,6 +33,7 @@ export const createServer = async () => {
 	await app.register(fastifySensible, {
 		sharedSchemaId: "HttpError",
 	});
+
 	await app.register(fastifyCors, {
 		origin: "*",
 	});
@@ -49,6 +50,15 @@ export const createServer = async () => {
 				description: "Upload images to your server!",
 				version: "1.0.0",
 			},
+			components: {
+				securitySchemes: {
+					apiKey: {
+						type: "apiKey",
+						name: "x-api-key",
+						in: "header",
+					},
+				},
+			},
 		},
 	});
 
@@ -57,6 +67,9 @@ export const createServer = async () => {
 		uiConfig: {
 			docExpansion: "full",
 			deepLinking: false,
+		},
+		theme: {
+			title: "Image Service",
 		},
 	});
 

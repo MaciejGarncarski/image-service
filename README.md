@@ -25,7 +25,7 @@ https://image.maciej-garncarski.pl/docs
 API_KEY= # api key for authentication
 PORT= # fastify app port
 SERVER_HOST= # name of docker-compose service
-# default name is "image-service" and "localhost" in development
+# default name is "image-service", you should use "localhost" in development
 REVERSE_PROXY_PORT= # reverse proxy port, most likely 80 or 443
 REVERSE_PROXY_HOST= # your domain or "image-service-proxy" in development
 IMAGE_DIR= # folder where images will be stored, folder should be located in this directory
@@ -66,7 +66,7 @@ docker compose up nginx --build -d
 ## Testing
 
 I used [vitest](https://vitest.dev/) for testing. My first thought was to use native Node.js test runner, but it has
-some gimmicks like not being able to run Typescript files out of the box or running some tests twice. So I decided to
+some flaws like not being able to run Typescript files out of the box or running some tests twice. So I decided to
 use vitest.
 
 ```bash
