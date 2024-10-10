@@ -1,7 +1,6 @@
 import { mkdir, readdir, unlink, writeFile } from "node:fs/promises";
 import { join, normalize } from "node:path";
 
-import { MultipartValue } from "@fastify/multipart";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { fileTypeFromBuffer } from "file-type";
 import { nanoid } from "nanoid";
@@ -23,9 +22,7 @@ export async function uploadHandler(request: FastifyRequest, reply: FastifyReply
 		return reply.badRequest("Invalid file type");
 	}
 
-	const folderField = file.fields.folder as MultipartValue<string | undefined>;
-
-	const safePathname = parseFolderField(folderField);
+	const safePathname = parseFolderField(file.fields.folder);
 
 	if (!safePathname) {
 		return reply.badRequest("Invalid folder");

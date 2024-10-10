@@ -1,30 +1,33 @@
 import { join, normalize } from "node:path";
 
-import { MultipartValue } from "@fastify/multipart";
+import { Multipart } from "@fastify/multipart";
 
 import { config } from "../../../config/config.js";
 
-export const parseFolderField = (folderField: MultipartValue<string | undefined>) => {
+export const parseFolderField = (folderField: Multipart | Multipart[] | undefined) => {
 	if (!folderField) {
 		return undefined;
 	}
 
-	const folderValue = folderField.value as string;
-
-	if (folderValue.startsWith("..") || folderValue.startsWith("/") || folderValue.includes("..")) {
+	if (Array.isArray(folderField)) {
 		return undefined;
 	}
 
-	const safeFolderValue = folderValue.replace(/^(\.\.(\/|\\|$))+/, "");
-	const safePathname = normalize(join(config.IMAGE_DIR, safeFolderValue));
-
-	if (
-		safeFolderValue.startsWith("..") ||
-		!safePathname.startsWith(config.IMAGE_DIR) ||
-		safePathname.startsWith("..")
-	) {
+	if (folderField.type === "file") {
 		return undefined;
 	}
 
-	return safePathname;
+	const folderFieldValue = folderField.value;
+
+	if (typeof folderFieldValue !== "string") {
+		return undefined;
+	}
+
+	if (folderFieldValue.startsWith("/") || folderFieldValue.includes("..")) {
+		return undefined;
+	}
+
+	const safeFolderValue = folderFieldValue.replace(/^(\.\.(\/|\\|$))+/, "");
+
+	return normalize(join(config.IMAGE_DIR, safeFolderValue));
 };

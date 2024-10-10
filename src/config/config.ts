@@ -21,7 +21,6 @@ export const ACCEPTED_MIMETYPES = Parse(acceptedMimeTypesSchema, [
 	"image/gif",
 	"image/webp",
 	"image/avif",
-	"image/svg+xml",
 ]);
 
 const nodeEnvSchema = StringLiteralUnion(["development", "production", "test"], {

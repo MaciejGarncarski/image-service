@@ -15,7 +15,13 @@ Upload images to your server! And serve them to your users!
 
 ## Documentation
 
+### API
+
 https://image.maciej-garncarski.pl/docs
+
+### Static files server
+
+https://image.maciej-garncarski.pl/static/**/*
 
 ## Installation
 

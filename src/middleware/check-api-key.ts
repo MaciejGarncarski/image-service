@@ -17,10 +17,10 @@ export const checkApiKey: preHandlerAsyncHookHandler = async (
 	reply: FastifyReply,
 ) => {
 	if (!request.headers[HEADER_API_KEY]) {
-		return reply.unauthorized();
+		return reply.unauthorized("No key provided");
 	}
 
 	if (request.headers[HEADER_API_KEY] !== config.API_KEY) {
-		return reply.unauthorized();
+		return reply.unauthorized("Invalid key provided");
 	}
 };
