@@ -50,10 +50,10 @@ export async function uploadHandler(request: FastifyRequest, reply: FastifyReply
 }
 
 export const getFileListHandler = async (
-	request: FastifyRequest<{ Params: { folder?: string } }>,
+	request: FastifyRequest<{ Querystring: { folderPath?: string } }>,
 	reply: FastifyReply,
 ) => {
-	const folder = request.params.folder;
+	const folder = request.query.folderPath;
 
 	if (!folder) {
 		try {

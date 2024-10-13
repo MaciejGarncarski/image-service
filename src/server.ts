@@ -43,9 +43,9 @@ export const createServer = async () => {
 			fileSize: MAX_FILE_SIZE,
 		},
 	});
+
 	await app.register(fastifySwagger, {
 		openapi: {
-			openapi: "3.1.0",
 			info: {
 				title: "Image Service",
 				description: "Upload images to your server!",

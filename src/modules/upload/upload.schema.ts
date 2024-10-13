@@ -1,4 +1,4 @@
-import { Type } from "@sinclair/typebox";
+import { Type } from "@fastify/type-provider-typebox";
 import { FastifySchema } from "fastify";
 
 import { StringLiteralUnion } from "../../utils/string-literal-union.js";
@@ -26,14 +26,15 @@ export const uploadResponseSchema = {
 };
 
 export const getFileListSchema: FastifySchema = {
+	operationId: "getFileList",
 	tags: ["Get file list in a folder"],
 	security: [
 		{
 			apiKey: [],
 		},
 	],
-	params: Type.Object({
-		folder: Type.String(),
+	querystring: Type.Object({
+		folderPath: Type.Optional(Type.String()),
 	}),
 	response: {
 		200: Type.Object({

@@ -23,7 +23,7 @@ export const uploadRoutes: FastifyPluginAsync = async (server) => {
 	server.route({
 		method: "GET",
 		preHandler: [server.checkApiKey],
-		url: "/list/*",
+		url: "/list",
 		schema: getFileListSchema,
 		handler: getFileListHandler,
 	});
