@@ -6,7 +6,7 @@ import { fastifySwaggerUi } from "@fastify/swagger-ui";
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import Fastify from "fastify";
 
-import { environment, MAX_FILE_SIZE } from "./config/config.js";
+import { environment, HEADER_API_KEY, MAX_FILE_SIZE } from "./config/config.js";
 import { checkApiKey } from "./middleware/check-api-key.js";
 import { uploadRoutes } from "./modules/upload/upload.route.js";
 
@@ -45,6 +45,7 @@ export const createServer = async () => {
 	});
 	await app.register(fastifySwagger, {
 		openapi: {
+			openapi: "3.1.0",
 			info: {
 				title: "Image Service",
 				description: "Upload images to your server!",
@@ -54,7 +55,7 @@ export const createServer = async () => {
 				securitySchemes: {
 					apiKey: {
 						type: "apiKey",
-						name: "x-api-key",
+						name: HEADER_API_KEY,
 						in: "header",
 					},
 				},
@@ -65,8 +66,8 @@ export const createServer = async () => {
 	await app.register(fastifySwaggerUi, {
 		routePrefix: "/docs",
 		uiConfig: {
-			docExpansion: "full",
-			deepLinking: false,
+			docExpansion: "list",
+			deepLinking: true,
 		},
 		theme: {
 			title: "Image Service",

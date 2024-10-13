@@ -49,6 +49,29 @@ export async function uploadHandler(request: FastifyRequest, reply: FastifyReply
 	});
 }
 
+export const getFileListHandler = async (
+	request: FastifyRequest<{ Params: { folder?: string } }>,
+	reply: FastifyReply,
+) => {
+	const folder = request.params.folder;
+
+	if (!folder) {
+		try {
+			const dir = await readdir(config.IMAGE_DIR);
+			return reply.send({ data: dir });
+		} catch {
+			return reply.notFound();
+		}
+	}
+
+	try {
+		const dir = await readdir(`${config.IMAGE_DIR}/${folder}`);
+		return reply.send({ data: dir });
+	} catch {
+		return reply.notFound();
+	}
+};
+
 export const deleteFileHandler = async (
 	request: FastifyRequest<{ Params: { folder: string; file: string } }>,
 	reply: FastifyReply,
