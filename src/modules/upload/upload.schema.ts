@@ -25,6 +25,17 @@ export const uploadResponseSchema = {
 	}),
 };
 
+export const uploadSchema: FastifySchema = {
+	security: [
+		{
+			apiKey: [],
+		},
+	],
+	tags: ["Upload image"],
+	consumes: ["multipart/form-data"],
+	response: uploadResponseSchema,
+};
+
 export const getFileListSchema: FastifySchema = {
 	operationId: "getFileList",
 	tags: ["Get file list in a folder"],

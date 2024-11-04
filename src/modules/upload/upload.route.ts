@@ -1,22 +1,14 @@
 import { FastifyPluginAsync } from "fastify";
 
 import { deleteFileHandler, getFileListHandler, uploadHandler } from "./upload.controller.js";
-import { deleteFileSchema, getFileListSchema, uploadResponseSchema } from "./upload.schema.js";
+import { deleteFileSchema, getFileListSchema, uploadSchema } from "./upload.schema.js";
 
 export const uploadRoutes: FastifyPluginAsync = async (server) => {
 	server.route({
 		method: "POST",
 		url: "/upload",
 		preHandler: [server.checkApiKey],
-		schema: {
-			tags: ["Upload image"],
-			security: [
-				{
-					apiKey: [],
-				},
-			],
-			response: uploadResponseSchema,
-		},
+		schema: uploadSchema,
 		handler: uploadHandler,
 	});
 
