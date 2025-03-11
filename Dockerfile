@@ -1,7 +1,10 @@
-FROM node:22-alpine AS base
+ARG NODE_VERSION=22.14.0
+
+FROM node:${NODE_VERSION}-alpine as base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
+
 COPY . /home/image-service
 WORKDIR /home/image-service
 
