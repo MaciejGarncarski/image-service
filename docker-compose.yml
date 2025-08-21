@@ -1,5 +1,6 @@
 services:
   image-service:
+    restart: always
     build:
       context: .
       dockerfile: Dockerfile
@@ -15,6 +16,7 @@ services:
     networks:
       - app-network
   nginx:
+    restart: always
     image: nginx:alpine
     container_name: ${REVERSE_PROXY_HOST}
     ports:
